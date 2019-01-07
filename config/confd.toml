@@ -1,0 +1,9 @@
+confdir = "/etc/confd"
+interval = 1
+backend = "etcd"
+nodes = [
+    "http://etcd:2379"
+]
+prefix = "/haproxy/"
+scheme = "http"
+verbose = false

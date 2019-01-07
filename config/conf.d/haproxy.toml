@@ -1,0 +1,8 @@
+[template]
+src = "haproxy.cfg.tmpl"
+dest = "/usr/local/etc/haproxy/haproxy.cfg"
+keys = [
+    "/blacklist"
+]
+check_cmd = "haproxy -c -f {{.src}}"
+reload_cmd = "cat /usr/local/etc/haproxy/haproxy.cfg && haproxy -f /usr/local/etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -x /var/run/haproxy.sock -sf $(cat /var/run/haproxy.pid) -D"
