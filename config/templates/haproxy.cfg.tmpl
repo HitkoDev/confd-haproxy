@@ -6,6 +6,7 @@ frontend http_frontend
     bind *:80
     mode tcp
     option tcplog
+    option forwardfor
 
     acl is-blocked-ip src{{range getvs "/blacklist/*"}} {{.}}{{else}} --{{end}}
     tcp-request connection reject if is-blocked-ip
@@ -16,6 +17,7 @@ frontend https_frontend
     bind *:443
     mode tcp
     option tcplog
+    option forwardfor
 
     acl is-blocked-ip src{{range getvs "/blacklist/*"}} {{.}}{{else}} --{{end}}
     tcp-request connection reject if is-blocked-ip
@@ -25,9 +27,9 @@ frontend https_frontend
 backend http_backend
     mode tcp
     balance roundrobin
-    server web01 "${BACKEND_SERVER}:80"
+    server web01 "${BACKEND_SERVER}:80" send-proxy
 
 backend https_backend
     mode tcp
     balance roundrobin
-    server web01 "${BACKEND_SERVER}:443"
+    server web01 "${BACKEND_SERVER}:443" send-proxy
