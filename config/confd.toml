@@ -1,6 +1,6 @@
 confdir = "/etc/confd"
 interval = 1
-backend = "etcd"
+backend = "etcdv3"
 nodes = [
     "http://etcd:2379"
 ]
