@@ -1,6 +1,7 @@
 FROM haproxy
 
 WORKDIR /
+RUN echo "" > /usr/local/etc/haproxy/blacklist.txt
 
 ADD ./confd /usr/bin/confd
 ADD ./config /etc/confd
