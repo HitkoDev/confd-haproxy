@@ -1,12 +1,18 @@
 global
     stats socket /var/run/haproxy.sock mode 600 expose-fd listeners level admin
     stats timeout 2m
+    log "${LOG_SERVER}" haproxy
+
+defaults
+    log global
+    option log-health-checks
 
 frontend http_frontend
     bind *:80
     mode tcp
     option tcplog
-    option forwardfor
+
+    timeout client 100s
 
     acl is-blocked-ip src{{range getvs "/blacklist/*"}} {{.}}{{else}} --{{end}}
     tcp-request connection reject if is-blocked-ip
@@ -17,7 +23,8 @@ frontend https_frontend
     bind *:443
     mode tcp
     option tcplog
-    option forwardfor
+
+    timeout client 100s
 
     acl is-blocked-ip src{{range getvs "/blacklist/*"}} {{.}}{{else}} --{{end}}
     tcp-request connection reject if is-blocked-ip
@@ -27,9 +34,19 @@ frontend https_frontend
 backend http_backend
     mode tcp
     balance roundrobin
+
+    timeout server 100s
+    timeout connect 100s
+    timeout queue 100s
+
     server web01 "${BACKEND_SERVER}:80" send-proxy
 
 backend https_backend
     mode tcp
     balance roundrobin
+
+    timeout server 100s
+    timeout connect 100s
+    timeout queue 100s
+
     server web01 "${BACKEND_SERVER}:443" send-proxy
