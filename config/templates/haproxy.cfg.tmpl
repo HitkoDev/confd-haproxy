@@ -1,7 +1,7 @@
 global
     stats socket /var/run/haproxy.sock mode 600 expose-fd listeners level admin
     stats timeout 2m
-    log "${LOG_SERVER}" haproxy
+    log "${LOG_SERVER}" local0
 
 defaults
     log global
