@@ -1,4 +1,4 @@
-FROM haproxy
+FROM haproxy:1.9
 
 WORKDIR /
 RUN echo "" > /usr/local/etc/haproxy/blacklist.txt
